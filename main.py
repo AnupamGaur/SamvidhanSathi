@@ -6,11 +6,13 @@ import sqlite3
 from datetime import datetime
 from corev2 import rag_chain,llm 
 from store import handle_message
-
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
+from dotenv import load_dotenv
+import os
+load_dotenv()
+# logging.basicConfig(
+#     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+#     level=logging.INFO
+# )
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -20,7 +22,7 @@ async def main_func(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await handle_message(update,context)
     # result = rag_chain.invoke({"input": update.effective_message.text})
     result = llm.invoke(f'You are a assistant specialized on the Indian Constitution. Give concise answer to the following question(40-50 words)-{update.effective_message.text}')
-    print(result)
+    # print(result)
     # await context.bot.send_message(chat_id=update.effective_chat.id, text=str(result['answer']))
     await context.bot.send_message(chat_id=update.effective_chat.id, text=str(result.content))
 
@@ -31,7 +33,7 @@ async def handle_non_text(update, context):
 
 if __name__ == '__main__':
     main_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), main_func)
-    application = ApplicationBuilder().token('7855088542:AAGfVY9w3H7BlIApx3eE8nzBBYCjR6G59nQ').build()
+    application = ApplicationBuilder().token(os.environ.get('TOKEN')).build()
     start_handler = CommandHandler('start', start)
 
     application.add_handler(
