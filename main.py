@@ -4,7 +4,7 @@ from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, Messa
 import pandas as pd
 import sqlite3
 from datetime import datetime
-from corev2 import rag_chain,llm 
+from corev2 import llm 
 from store import handle_message
 from dotenv import load_dotenv
 import os
